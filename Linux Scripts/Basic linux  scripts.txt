@@ -1,0 +1,77 @@
+for task in eat sleep study gym
+ do
+   echo $task
+done
+ 
+ 
+for i in 1 2 3 5
+do
+        echo number is $i
+done
+ 
+for i in {1..10}
+do
+        echo number is $i
+done
+
+ 
+
+<< comment
+ echo "what is your age sir"
+read age
+if [ $age -gt 18 ]
+then
+    echo you are eligible to vote
+else
+   echo you are not eligible to vote
+fi
+ 
+ 
+echo 'choose an option
+   A) for date
+   B) for ls
+   C) for pwd
+read choice
+case $choice in
+    A) date ;;
+    B) ls;;
+    C)pwd;;
+    *)echo "invalid input"
+esac
+comment
+
+itemlist="./file.txt"
+for item in $(cat $itemlist)
+do
+  echo $item
+done
+
+
+echo enter two number
+read a
+read b
+let mult=$a*$b
+echo result is $mult
+
+
+
+myarr=( 1 2 "divy" "hey man" )
+len=${#myarr[*]}
+for(( i=0; i < $len; i++ ))
+do
+echo ${myarr[$i]}
+done
+
+
+echo length of array is ${#myarr[*]}
+echo value at index 2 is ${myarr[2]}
+echo substring from arr is ${myarr[*]:2:2}
+
+
+
+myvar="hey this is divy this side"
+echo length of string is-  ${#myvar}
+echo upper case string is-  ${myvar^^}
+echo lower case string is- ${myvar,,}
+echo replace word-  ${myvar/divy/divyansh}
+echo slice-  ${myvar:6:11}

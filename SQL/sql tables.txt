@@ -1,0 +1,131 @@
+insert into sale values
+(100002,"D002","C0003","2015-08-12","online","E006",108967,99213),
+(100003,"D003","C0004","2012-03-9","online","E010",408967,99313),
+(100005,"D004","C0003","2015-04-12","cheque","E001",19867,93213),
+(100006,"D005","C0004","2011-02-2","bank finance","E009",189227,92133),
+(100007,"D006","C0001","2022-08-12","online","E012",10967,9912),
+(100008,"D007","C0003","2018-03-9","online","E011",39967,99232),
+(100009,"D008","C0004","2014-4-12","cheque","E013",59867,9289),
+(100010,"D009","C0001","2012-02-2","bankfinance","E014",9227,4313);
+
+
+-- create table sale(
+-- invoiceno int primary key,
+-- carid char(4),
+-- custId char(6),
+-- saleDate date,
+-- paymentmode varchar(30),
+-- empid char(4),
+-- saleprice decimal(8,2),
+-- commission decimal(7,2)
+-- );
+-- drop table sale;
+-- select custID,count(carid) as  "car_purchase" from sale group by custId
+-- select custId,count(custId) from sale group by custId having count(custId)>2 ;
+-- select paymentmode,count(*) from sale group by paymentmode;
+-- select paymentmode,count(*) from sale group by paymentmode having count(*)>1;
+
+
+
+
+-- CREATE TABLE Employee (
+--     EmpID INT PRIMARY KEY,
+--     Name VARCHAR(255),
+--     Job VARCHAR(255),
+--     Doj DATE,
+--     Salary DECIMAL(10, 2),
+--     Bonus INT,
+--     DepCode INT,
+--     Address VARCHAR(255)
+-- );
+-- INSERT INTO Employee (EmpID, Name, Job, Doj, Salary, Bonus, DepCode, Address) VALUES
+-- (1, 'xridhi', NULL, NULL, NULL, NULL, NULL, NULL),
+-- (2, 'Xridhi', NULL, NULL, NULL, NULL, NULL, NULL),
+-- (101, 'vridhi', NULL, NULL, NULL, NULL, NULL, NULL),
+-- (102, 'Mahaveer Sharma', 'Clerk', '2001-07-10', 11200, 140, 1111, 'Noida'),
+-- (103, 'Bhawesh', 'Salesman', '2000-09-01', 10000, 50, 1112, 'Faridabad'),
+-- (105, 'Fatima Malik', 'Manager', '2005-08-10', 20000, 1000, 1113, 'amritsar'),
+-- (106, 'Honey Singh', 'Clerk', '2003-04-10', 12000, 100, 1111, 'delhi'),
+-- (107, 'Vridhi', 'Manager', '2000-09-10', 25000, 2000, 1113, 'noida'),
+-- (108, 'Hemant', 'Salesman', '2000-12-01', 12000, 100, 1112, 'noida'),
+-- (109, 'Dhara', 'HR', '2000-09-10', 25000, 2000,1114 , 'VikasNagar'),
+-- (110, 'Bhoomi', 'Manager', '2001-09-10', 25000, 2000, 1113, 'Faridabad'),
+-- (111, 'Rekha', 'Clerk', '2001-07-10', 17000, NULL, 1111, 'Mumbai'),
+-- (112, 'Ram', 'Clerk', '2003-12-10', 10000, NULL, 1111, 'Noida'),
+-- (1111, 'Satish', 'Clerk', '2001-07-10', 17800, 100, 1111, 'Mumbai');
+
+--codeQueen for questions practice on having
+
+select job,min(salary),max(salary) from employee group by job;
+
+select job,avg(salary) from employee group by job having count(job)>2;
+select * from employee;
+select job ,max(salary) from employee group by job having max(salary)>=23000;
+
+
+
+
+- create table manager(
+-- managerid varchar(5) primary key,
+-- managername varchar(20),
+-- city  varchar(20)
+-- );
+-- insert into manager values
+-- ('M101','ajay','pune'),
+-- ('M102','amit','mumbai'),
+-- ('M103','sandeep','banglore'),
+-- ('M104','prakhar','pune'),
+-- ('M105','jaydeep','indore'),
+-- ('M106','shubham','banglore');
+create table dept(
+deptid int primary key,
+deptname varchar(22)
+);
+insert into dept values(1,'admin'),(2,'HR'),(3,'developer'),(4,'Tester'),(5,'Accounts');
+create table emp(
+empid int,
+empname varchar(22),
+salary int,
+city varchar(22),
+deptid int,
+foreign key(deptid) references dept(deptid),
+managerid varchar(20),
+foreign key(managerid) references manager(managerid)
+);
+insert into emp values
+(1,'karan',300000,'mumbai',2,'M102'),
+(2,'Rohit',75000,'banglore',1,'M106'),
+(3,'Ankush',35000,'ahemdabad',5,'M105'),
+(4,'Priyanshi',500000,'kokata',3,'M102'),
+(5,'Sanket',100000,'pune',3,'M101'),
+(6,'Shruti',80000,'Indore',4,'M105'),
+(7,'Jayraj',75000,'Bhopal',2,'M103'),
+(8,'Dilip',66000,'mumbai',3,'M102'),
+(9,'Geet',17000,'mumbai',2,'M101');
+
+
+
+
+-- -interview sql queries  on joins by  codeEra refer this for questions
+select dept.deptname,count(*) from dept inner join emp on dept.deptid=emp.deptid group by emp.deptid having count(emp.deptid)>2;
+select dept.deptname,avg(emp.salary) from emp inner join dept on emp.deptid=dept.deptid group by dept.deptname having avg(salary)>75000 order by dept.deptname asc;
+select manager.managername,emp.empname,manager.city from manager inner join emp on emp.managerid=manager.managerid where emp.city=manager.city;
+select emp.empname,dept.deptname,manager.managername,emp.salary from (emp inner join dept on emp.deptid=dept.deptid) inner join manager on emp.managerid=manager.managerid where emp.salary between 35000 and 90000;
+
+
+
+-- codeglitz subquery in sql
+
+SELECT * FROM sqlpractice.emp2;
+-- salary of emp greater than managers
+select e.name,e.salary,m.name,m.salary from emp2 e inner join emp2 m  on e.managerId=m.empId where e.salary>m.salary;
+select e.name,e.salary from emp2 e where e.salary>(select m.salary from emp2 m where e.managerId=m.empId);
+-- emp and their manager name
+select e.name,(select m.name from emp2 m where e.managerId=m.empId) from emp2 e;
+-- nth highest salary
+select distinct salary from emp2 order by salary desc limit 1,1;
+select distinct salary from (
+select salary,
+   dense_rank() over (order by salary desc)R
+   from emp2) as subquery
+   where R=2;
