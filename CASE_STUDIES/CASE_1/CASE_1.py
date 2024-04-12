@@ -36,7 +36,7 @@ participant1_email = training_session["participants"][0]["email"]
 participant2_name = training_session["participants"][1]["name"]
 participant2_email = training_session["participants"][1]["email"]
 
-# Printing the valuesvalues
+# Printing the values svalues
 print("Session Name:", session_name)
 print("Session Date:", session_date)
 print("Session Completed:", session_completed)
