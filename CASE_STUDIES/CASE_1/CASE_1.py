@@ -38,6 +38,7 @@ participant2_email = training_session["participants"][1]["email"]
 
 # Printing the values svalues
 print("Session Name:", session_name)
+
 print("Session Date:", session_date)
 print("Session Completed:", session_completed)
 print("Instructor Name:", instructor_name)
