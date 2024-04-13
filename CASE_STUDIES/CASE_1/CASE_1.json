@@ -1,0 +1,20 @@
+{
+    "name": "Python Training",
+    "date": "April 19, 2024",
+    "completed": true,
+    "instructor": {
+     "name": "Divyansh",
+     "website": "http://diviEdu.com/"
+    },
+    "participants": [
+      {
+        "name": "Vivan",
+        "email": "vivan18@yahoo.com"
+      },
+      {
+        "name": "Arav",
+        "email": "solankiarav18@gmail.com"
+      }
+    ]
+  }
+  
