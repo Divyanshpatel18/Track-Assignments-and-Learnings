@@ -1,0 +1,19 @@
+1. starting namenode and datanode
+C:\Users\ASUS>cd ../..
+C:\>cd hadoop-3.4.0
+C:\hadoop-3.4.0>cd sbin
+C:\hadoop-3.4.0\sbin>.\start-dfs.cmd
+
+2. starting resourcemanager and nodemanager
+C:\hadoop-3.4.0\sbin>.\start-yarn.cmd
+starting yarn daemons
+
+3.creating hdfs file structure on hadoop
+  hadoop fs -mkdir /user/divyansh
+  hadoop fs -put mapper.java /user/divyansh/
+  hadoop fs -put reducer.java /user/divyansh/
+  hadoop fs -put runner.java /user/divyansh/
+  hadoop fs -put input.txt /user/divyansh/
+4.creating maven project ,adding dependencies,and creating mapper ,reducer and runner classes
+5.running the program
+wordcount> hadoop jar target/WordCount-0.0.1-SNAPSHOT.jar org.hadoopex.WC_Runner /user/divyansh/input.txt /output

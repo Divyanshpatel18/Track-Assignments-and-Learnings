@@ -1,0 +1,3 @@
+org\hadoopex\WC_Runner.class
+org\hadoopex\WC_Mapper.class
+org\hadoopex\WC_Reducer.class
