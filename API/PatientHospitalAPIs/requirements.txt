@@ -1,0 +1,7 @@
+uvicorn
+fastapi[all]~=0.104.1
+mongoengine
+pymongo~=4.6.0
+sqlalchemy==1.4.17
+pydantic~=2.5.1
+
