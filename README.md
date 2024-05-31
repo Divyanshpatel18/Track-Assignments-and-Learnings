@@ -49,9 +49,9 @@ This repository contains various projects, assignments, and scripts related to m
 ## Case Studies
 
   All the given Assignments] are 
-- [Assignment 1: JOSN to MySQL DB](#assignment-1--greek-gods)
-- [Assignment 2:Greek Gods](#assignment-2)
-- [Assignment 3: MapReduce](#assignment-3--mapreduce)
+- [Assignment 1: JSON to MySQL DB]
+- [Assignment 2:Greek Gods]
+- [Assignment 3: MapReduce]
 
 ---
 
