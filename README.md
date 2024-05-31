@@ -21,7 +21,7 @@ This repository contains various projects, assignments, and scripts related to m
 ## Linux Scripts
 
 - [ Contains Linux Concepts,Commands and Linux scripts](./Linux-Scripts)
-- 
+
 ## SQL
 
 - [SQL Fundamentals,Practice Questions](./SQL)
@@ -41,7 +41,7 @@ This repository contains various projects, assignments, and scripts related to m
 ## Hadoop
 
 - [ Hadoop WORDCOUNT Assigment and Learings](./Hadoop)
-- 
+  
 ## Docker
 
 - [Contains all the DOCKER concepts and learnings](./Docker)
