@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400..900;1,400..900&family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@300;400;500;600&display=swap');
+:root {
+    --main-color: #22BAA0;
+    --color-dark: #34425A;
+    --text-grey: #B0B0B0;
+}
+section{
+    margin-top: 6rem;
+}
+
+.nav .nav-link.active {
+    background: linear-gradient(45deg, #e91e63, #f44336);
+    color: #fff;
+}
+
+.nav button{
+    background: linear-gradient(45deg,#e91e63,#f44336);
+    color: black;
+     width: 300px;
+     border: none;
+     border-radius:0px;
+   
+    -webkit-box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
+  
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    margin-bottom: 10px;
+    display: flex; 
+    align-items: center;
+}
+li i{
+    margin-right: 5px;
+}
+.table-striped tbody td {
+    height: 40px; 
+}
+
+
+ 
+.outer-card {
+
+    max-width: 600px; 
+    
+    margin: 0 14px; 
+ 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+}
+.card-body h5{
+    color: #444;
+}
+
+.card-img-top {
+    /* width: 35%;
+    height: 100%; */
+    margin-top: 37px;
+    overflow: hidden;
+}
+
+.inner-card{
+    box-sizing: border-box;
+    margin: 0 auto;
+    margin-top: 1px;;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding:10px;
+    background: linear-gradient(45deg, #e91e63, #f44336);
+    border-top-right-radius:50px;
+    color: #444;
+   
+    border: 4px solid white;
+    font-family: "Alegreya", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+.inner-card td strong{
+    color: #444;
+}
+.inner-card li{
+    margin-top: 2%;
+}
+.card-title {
+    margin-bottom: 10px;
+    font-size: 1.25rem; 
+    color: #333;
+    font-weight: bold;
+}
+
+.card-text {
+    margin-bottom:10px;
+    color: white;
+
+}
+
+.fixed-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+
+
+.card-text.department {
+    font-style: italic;
+}
+#portfolio main {
+    margin-top: -23px;
+}
+
+.dashboard .page-header {
+    padding: 1.3rem 1rem;
+    background: #E9edf2;
+    border-bottom: 1px solid #dee2e8;
+}
+
+.dashboard .page-header h1, .page-header small {
+    color: #74767d;
+}
+.dashboard .page-content {
+    padding: 1.3rem 1rem;
+    background: #f1f4f9;
+}
+
+.employee-operations{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 2rem;
+    margin-top: .5rem;
+    margin-bottom: 2rem;
+}
+.dashboard .card {
+    box-shadow: 0px 5px 5px -5px rgb(0 0 0 / 10%);
+    background: #fff;
+    padding: 1rem;
+    border-radius: 3px;
+}
+
+.dashboard .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.dashboard .card-head h2 {
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.dashboard .card-head span {
+    font-size: 3.2rem;
+    color: var(--text-grey);
+}
+
+.dashboard .card-progress small {
+    color: #777;
+    font-size: .8rem;
+    font-weight: 600;
+}
+
+.dashboard .card-indicator {
+    margin: .7rem 0rem;
+    height: 10px;
+    border-radius: 4px;
+    background: #e9edf2;
+    overflow: hidden;
+}
+
+.indicator {
+    height: 10px;
+    border-radius: 4px;
+}
+.indicator.four {
+    background: #f25656;
+}
+.view-receipt {
+    text-decoration: none;
+}
+.modal-title{
+    color:  #74767d;;
+}
+.modal-header{
+    background:#E9edf2 ;
+}
+.employee-operations .card{
+    cursor: pointer;
+}
+.employee-operations a{
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    border-radius: 5px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table thead tr {
+    background: #e9edf2;
+}
+
+table thead th {
+    padding: 1rem 0rem;
+    text-align: left;
+    color: #444;
+    font-size: .9rem;
+}
+
+table thead th:first-child {
+    padding-left: 1rem;
+}
+
+table tbody td {
+    padding: 1rem 0rem;
+    color: #444;
+}
+
+table tbody td:first-child {
+    padding-left: 1rem;
+    color: var(--main-color);
+    font-weight: 400;
+    font-size: .9rem;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dee2e8;
+}

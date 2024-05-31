@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <!-- INCLUDE THE HEADER COMPONENT -->
+    {% include 'components/header.html' %}
+
+    
+     <section id="tabs" class="tabs ">
+        <div class="container">
+            <!-- SECTION TO SWITCH BETWEEN DIFFERENT TABS -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link " id="portfolio-tab" data-bs-toggle="tab" data-bs-target="#portfolio" type="button" role="tab" aria-controls="portfolio" aria-selected="true">Portfolio</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="manage-employees-tab" data-bs-toggle="tab" data-bs-target="#manage-employees" type="button" role="tab" aria-controls="manage-employees" aria-selected="false">Manage Employees</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="manage-departments-tab" data-bs-toggle="tab" data-bs-target="#manage-departments" type="button" role="tab" aria-controls="manage-departments" aria-selected="false">Manage Departments</button>
+                </li>
+                
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="claim-tab" data-bs-toggle="tab" data-bs-target="#claim" type="button" role="tab" aria-controls="claim" aria-selected="false">Reimbursement</button>
+                  </li>
+            </ul>
+        <!-- ---------------------------------------------------- -->
+          
+            <div class="tab-content mt-5 listTab" id="myTabContent">
+
+                <!-- 1. ADMIN DASHBOARD TAB -->
+                <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                   
+                    <main class="dashboard">
+            
+                        <div class="page-header">
+                            <h1>Dashboard</h1>
+                            <small>Home / Dashboard</small>
+                        </div>
+                        
+                        <div class="page-content">
+                        
+                            <div class="analytics">
+            
+                                <div class="card">
+                                    <div class="card-head">
+                                        <h2>{{total_users}}</h2>
+                                        <span class="las la-user-friends"></span>
+                                    </div>
+                                    <div class="card-progress">
+                                        <small>Number of Active users</small>
+                                        <div class="card-indicator">
+                                            <div class="indicator one"  id="progressUsers"></div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="card">
+                                    <div class="card-head">
+                                        <h2>{{total_departments}}</h2>
+                                        <span class="las la-city"></span>
+                                    </div>
+                                    <div class="card-progress">
+                                        <small>Department count</small>
+                                        <div class="card-indicator">
+                                            <div class="indicator two"  id="progressDepartments"></div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="card">
+                                    <div class="card-head">
+                                        <h2>{{total_approved_rejected_reimbursements}}</h2>
+                                        <span class="las la-file-invoice"></span>
+                                    </div>
+                                    <div class="card-progress">
+                                        <small>approved/rejected reimbursement requests</small>
+                                        <div class="card-indicator">
+                                            <div class="indicator three" id="progressApprovedRejected"></div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div class="card">
+                                    <div class="card-head">
+                                        <h2>{{total_pending_reimbursements}}</h2>
+                                        <span class="las la-clock"></span>
+                                    </div>
+                                    <div class="card-progress">
+                                        <small>pending reimbursement requests</small>
+                                        <div class="card-indicator">
+                                            <div class="indicator four"  id="progressPending"></div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                            </div>
+            
+            
+                            <div class="records table-responsive">
+
+            
+                                <div>
+                                    <table width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th><span class="las la-sort"></span> EMPLOYEE</th>
+                                                <th><span class="las la-sort"></span> CATEGORY</th>
+                                                <th><span class="las la-sort"></span>TYPE</th>
+                                                <th><span class="las la-sort"></span>STATUS</th>
+                                                <th><span class="las la-sort"></span> AMOUNT</th>
+                                                <th><span class="las la-sort"></span> DATE</th>
+                                                <th><span class="las la-sort"></span> RECEIPT</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for reimbursement in latest_reimbursements %}
+                                            <tr>
+                                                <td>#{{reimbursement.id}}</td>
+                                                <td>
+                                                    <div class="client">
+                                                        {% if reimbursement.user.user_image %}
+                                                        <div class="client-img bg-img" style="background-image: url('data:image/jpeg;base64,{{ reimbursement.user.user_image }}')"></div>
+                                                        {% else %}
+                                                        <div class="client-img bg-img" style="background-image: url('/static/images/logo.png')"></div>
+                                                        {% endif %}                                                  
+                                                        <div class="client-info">
+                                                        <h4>{{reimbursement.user.full_name}}</h4>
+                                                        <small>{{reimbursement.user.email}}</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    {{reimbursement.request_category}}
+                                                </td>
+                                                <td>
+                                                    {{reimbursement.expense_type}}
+                                                </td>
+                                                <td>
+                                                    {{reimbursement.status}}
+                                                </td>
+                                                <td>
+                                                   {{reimbursement.amount}}
+                                                </td>
+                                                <td>
+                                                    {{reimbursement.date}}
+                                                </td>
+                                                <td>
+                                                    <a href="#" class="view-receipt" data-receipt="{{ reimbursement.receipt }}">View Receipt</a>
+                                                    
+                                                </td>
+                                               
+                                            </tr>
+                                          
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+            
+                            </div>
+                        
+                        </div>
+                        
+                    </main>
+                    
+                </div>
+     <!-- --------------------------------------------------------- -->
+                <!-- 2.PROFILE TAB -->
+                <div class="tab-pane fade show opertions " id="portfolio" role="tabpanel" aria-labelledby="portfolio-tab">
+                    <main class="dashboard">
+            
+                        <div class="page-header">
+                            <h1>Profile</h1>
+                            <small>Admin / Profile</small>
+                        </div>
+                        
+                        <div class="page-content">
+                            <div class="card outer-card">
+                                <div class="card-body">
+                                    <div class="employee-info d-flex">
+                                        <img src="data:image/jpeg;base64,{{ user.user_image }}" class="card-img-top fixed-image "
+                                            alt="User Image">
+                                        <div class="card inner-card">
+                                            <div class="col">
+                                                <h5 class="text-center"><strong>EMPLOYEE INFORMATION</strong></h5>
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>EMPLOYEE ID</strong></td>
+                                                            <td>{{ user.id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>NAME</strong></td>
+                                                            <td>{{ user.full_name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>EMAIL</strong></td>
+                                                            <td>{{ user.email }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>ROLE</strong></td>
+                                                            <td>{{ user.role }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>DEPARTMENT</strong></td>
+                                                            <td>{{ department_name }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                        
+                        </div>
+                        
+                    </main>
+                  
+                    
+                </div>
+
+   <!-- ------------------------------------------------------------ -->
+                <!-- 3.MANAGE EMPLOYEES TAB -->
+                <div class="tab-pane fade operations" id="manage-employees" role="tabpanel" aria-labelledby="manage-employees-tab">
+                    <main class="dashboard ">
+            
+                        <div class="page-header">
+                            <h1>Manage-Employees</h1>
+                            <small>Admin / manage-employees</small>
+                        </div>
+                        <div class="page-content employee-operations">
+                        
+                               
+                                    <div class="card" data-bs-toggle="modal" data-bs-target="#makeManagerModal">     
+                                        <div class="card-head">
+                                            <h2>Make Manager</h2>
+                                            <span class="fa-solid fa-user-tie"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small>Assign Employee to  Manager role</small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>
+                           
+                            
+                                    <div class="card" data-bs-toggle="modal" data-bs-target="#assignManagerModal">     
+                                        <div class="card-head">
+                                            <h2>Assign Manager</h2>
+                                            <span class="fa-solid fa-user-gear"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small>Assign Manager to Employee</small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>
+                        
+                           
+                                    <div  class="card" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">     
+                                        <div class="card-head">
+                                            <h2>Delete Employee</h2>
+                                            <span class="fa-solid fa-user-minus"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small>Delete an Employee</small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>                                         
+                        </div>
+                  </main>
+                </div>
+    <!-- ---------------------------------------------------- -->
+                <!-- 4. MANAGE DEPARTMENTS TAB -->
+                <div class="tab-pane fade operations" id="manage-departments" role="tabpanel" aria-labelledby="manage-departments-tab">
+                    <main class="dashboard">
+            
+                        <div class="page-header">
+                            <h1>Manage-Departments</h1>
+                            <small>Admin / manage-departments</small>
+                        </div>
+                        <div class="page-content department-operations">
+                        
+                               
+                            <div class="card" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">     
+                                <div class="card-head">
+                                    <h2>Add Department</h2>
+                                    <span class="fa-solid fa-building-circle-check"></span>
+
+                                </div>
+                                <div class="card-progress">
+                                    <a href="javascript:void(0);"><small>Add a New Department</small></a>
+                                    <div class="card-indicator">
+                                        <div class="indicator four"  id="progressPending"></div>
+                                    </div>
+                                </div>                            
+                               
+                            </div>
+                   
+                    
+                            <div  class="card" data-bs-toggle="modal" data-bs-target="#deleteDepartmentModal">     
+                                <div class="card-head">
+                                    <h2>Delete Department</h2>
+                                    <span class="fa-solid fa-building-circle-xmark"></span>
+                                </div>
+                                <div class="card-progress">
+                                    <a href="javascript:void(0);"><small>Delete an un-need Department</small></a>
+                                    <div class="card-indicator">
+                                        <div class="indicator four"  id="progressPending"></div>
+                                    </div>
+                                </div>                            
+                               
+                            </div>
+         
+                        </div>
+                        
+                    </main>
+                </div>
+    <!-- -------------------------------------------------------------------- -->
+                <!-- 5 .MANAGE REIMBURSEMENT TAB -->
+                <div class="tab-pane fade operations" id="claim" role="tabpanel" aria-labelledby="claim-tab">
+                    <main class="dashboard">
+            
+                        <div class="page-header">
+                            <h1>Manage-Requests</h1>
+                            <small>Admin / manage-reimbursements</small>
+                        </div>
+                        <div class="page-content department-operations">
+                            <div  class="card" data-bs-toggle="modal" data-bs-target="#approveOrRejectReimbursementModal">     
+                                <div class="card-head">
+                                    <h2>approve/reject claim</h2>
+                                    <span class="fa-solid fa-user-tie"></span>
+                                </div>
+                                <div class="card-progress">
+                                    <a href="javascript:void(0);"><small>reimbursement requests to approve or reject</small></a>
+                                    <div class="card-indicator">
+                                        <div class="indicator four"  id="progressPending"></div>
+                                    </div>
+                                </div>                            
+                            
+                            </div>
+                
+                    
+                            <div class="card" data-bs-toggle="modal" data-bs-target="#seeApprovedRejectedReimbursementModal">     
+                                <div class="card-head">
+                                    <h2>approved/rejected</h2>
+                                    <span class="fa-solid fa-user-gear"></span>
+                                </div>
+                                <div class="card-progress">
+                                    <a href="javascript:void(0);"><small>display approved and rejected reimbursements </small></a>
+                                    <div class="card-indicator">
+                                        <div class="indicator four"  id="progressPending"></div>
+                                    </div>
+                                </div>                            
+                            
+                            </div>
+                        </div>
+                    </main>
+                    
+
+                </div>
+            </div>
+        </div>
+    </section>
+ <!-- =============================================================================================== -->
+ <!-- =============================================================================================== -->
+    <!-- MODALS FOR CORRESPONDING ABOVE OPERATIONS -->
+
+    <!-- 1.  MAKE-MANAGER Modal -->
+    <div class="modal fade mt-5" id="makeManagerModal" tabindex="-1" aria-labelledby="makeManagerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title " id="makeManagerModalLabel">Make Employee a Manager</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="makeManagerForm" method="POST" action="/make_manager">
+                        <div class="form-group">
+                            <label for="employee_id" class="form-label">Employee ID:</label>
+                            <input type="text" class="form-control" id="employee_id" name="employee_id" placeholder="Enter Employee ID" required>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-outline-danger">Make Manager</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- 2. ASSIGN MANAGER Modal -->
+    <div class="modal fade mt-5" id="assignManagerModal" tabindex="-1" aria-labelledby="assignManagerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title" id="assignManagerModalLabel">Assign Employee a Manager</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="assignManagerToEmployee" method="POST" action="/assign_manager" >
+                        <div class="form-group ">
+                            <label for="employee_id" class="form-label">Employee ID:</label>
+                            <input type="text" class="form-control" id="employee_id" name="employee_id" placeholder="Enter employee Id" required><br><br>
+                       </div>
+                       <div class="form-group" style="margin-top: -25px; margin-bottom: -20px;">
+                            <label for="manager_id" class="form-label">Manager ID:</label>
+                            <input type="text" class="form-control" id="manager_id" name="manager_id" placeholder="Enter Manager Id" required><br><br>
+                       </div>
+                       <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-outline-danger">Assign Manager</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 3. DELETE EMPLOYEE modal -->
+    <div class="modal fade mt-5" id="deleteEmployeeModal" tabindex="-1" aria-labelledby="deleteEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title" id="deleteEmployeeModalLabel">Delete an Employee</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="deleteForm" method="POST" action="/delete_employee" >
+                        <div class="form-group ">
+                            <label for="employee_id" class="form-label">Employee ID:</label>
+                            <input type="text" class="form-control" id="employee_id" name="employee_id" placeholder="Enter employee Id" required><br><br>
+                       </div>
+                       <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-outline-danger">Delete Employee</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- 4. ADD-DEPARTMENT Modal -->
+     <div class="modal fade mt-5" id="addDepartmentModal" tabindex="-1" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title" id="addDepartmentModalLabel">Add a Department</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form  id="addDepartmentForm" method="POST" action="/add_department" >
+                        <div class="form-group ">
+                            <label for="dept_name" class="form-label">Department Name:</label>
+                            <input input type="text" id="dept_name" name="dept_name"  class="form-control"  placeholder="Enter Department name" required><br><br>
+                       </div>
+                       <div class="form-group ">
+                        <label for="city"class="form-label">Department City:</label>
+                        <input input type="text" id="city" name="city"  class="form-control"  placeholder="Enter Department City" required><br><br>
+                   </div>
+                       <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-outline-danger">Add Department</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- 5. DELETE-DEPARTMENT Modal -->
+     <div class="modal fade mt-5" id="deleteDepartmentModal" tabindex="-1" aria-labelledby="deleteDepartmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteDepartmentModalLabel">Delete a Department</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form  id="deleteDepartmentForm" method="POST" action="/delete_department" >
+                        <div class="form-group ">
+                            <label for="dept_id" class="form-label">Department ID:</label>
+                            <input type="text" id="dept_id" name="dept_id" class="form-control"placeholder="Enter Department Id" required><br><br>
+                       </div>
+                       <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-outline-danger">Delete Department</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+     <!-- 6. APPROVE or REJECT REIMBURSEMENT Modal -->
+     <div class="modal fade mt-5" id="approveOrRejectReimbursementModal" tabindex="-1" aria-labelledby="approveOrRejectReimbursementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="approveOrRejectReimbursementModalLabel">Approved or Rejected Reimbursement Requests</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if unchecked_managers_reimbursement_requests %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Employee</th>
+                                    <th>Request Category</th>
+                                    <th>Expense Type</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Receipt</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in unchecked_managers_reimbursement_requests %}
+                                <tr>
+                                    <td>#{{ request.id }}</td>
+                                    <td>
+                                        <div class="client">
+                                            {% if request.user.user_image %}
+                                            <div class="client-img bg-img" style="background-image: url('data:image/jpeg;base64,{{ request.user.user_image }}')"></div>
+                                            {% else %}
+                                            <div class="client-img bg-img" style="background-image: url('/static/images/logo.png')"></div>
+                                            {% endif %}                                                  
+                                            <div class="client-info">
+                                            <h4>{{request.user.full_name}}</h4>
+                                            <small>{{request.user.email}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ request.request_category }}</td>
+                                    <td>{{ request.expense_type }}</td>
+                                    <td>{{ request.amount }}</td>
+                                    <td>{{ request.date }}</td>
+                                  
+
+
+                                    <td>
+                                        <a href="#" class="view-receipt" data-receipt="{{ request.receipt }}">View Receipt</a>
+                                        
+                                    </td>
+                                    <td>{{ request.status }}</td>
+                                    <td>
+                                        <form id="reimbursementForm-{{ request.id }}" method="POST" action="">
+                                            <input type="hidden" id="action" name="action" value="">
+                                            <input type="hidden" id="request_id" name="request_id" value="{{ request.id }}">
+                                            <input type="hidden" id="userRole" name="userRole" value="{{ user.role }}">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <textarea name="comment" id="comment" class="form-control comment-textarea"  placeholder="Add your comment here..." required></textarea>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <button type="button" class="btn btn-success" onclick="setAction('approve', this.form);">Approve</button>
+                                                    <button type="button" class="btn btn-danger" onclick="setAction('reject', this.form);">Reject</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <h5 class="text-center">No reimbursement requests to display.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 7. SEE ALL APPROVED/REJECTED REIMBURSEMENT Requests Modal -->
+    <div class="modal fade mt-5" id="seeApprovedRejectedReimbursementModal" tabindex="-1" aria-labelledby="seeApprovedRejectedReimbursementModalLabel" aria-hidden="true"  style="padding-bottom: 40px;">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title" id="seeApprovedRejectedReimbursementModalLabel">Approve or Reject Reimbursement Requests</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if checked_managers_reimbursement_requests %}
+                    <div class="table-responsive">
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Request ID</th>
+                                    <th scope="col">Employee </th>
+                                    <th scope="col">Request Category</th>
+                                    <th scope="col">Expense Type</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Receipt</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in checked_managers_reimbursement_requests %}
+                                <tr>
+                                    <td>#{{ request.id }}</td>
+                                    <td>
+                                        <div class="client">
+                                            {% if request.user.user_image %}
+                                            <div class="client-img bg-img" style="background-image: url('data:image/jpeg;base64,{{ request.user.user_image }}')"></div>
+                                            {% else %}
+                                            <div class="client-img bg-img" style="background-image: url('/static/images/logo.png')"></div>
+                                            {% endif %}                                                  
+                                            <div class="client-info">
+                                            <h4>{{request.user.full_name}}</h4>
+                                            <small>{{request.user.email}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ request.request_category }}</td>
+                                    <td>{{ request.expense_type }}</td>
+                                    <td>{{ request.amount }}</td>
+                                    <td>{{ request.date }}</td>
+                                    <td>
+                                        <a href="#" class="view-receipt" data-receipt="{{ request.receipt }}">View Receipt</a>                 
+                                    </td>
+                                    <td>{{ request.status }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <h5 class="text-center">No reimbursement requests to display.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // The function is built to redirect form submission accordingly to different actions like approve or reject
+       function setAction(action, form) {
+            if (action === 'approve') {
+                form.action = '/approve_reimbursement';
+            } else if (action === 'reject') {
+                form.action = '/reject_reimbursement';
+            }
+            // Submit the form
+            form.submit();
+        }
+       //  for dynamically setting progress bar widths
+        // the  arguments are being passed form app.py
+        var totalUsers = "{{ total_users }}";
+        var maxUsers = "{{ max_users }}";
+        var progressWidthUsers = (totalUsers / maxUsers) * 100;
+        document.getElementById("progressUsers").style.width = progressWidthUsers + "%";
+    
+        var totalDepartments = "{{ total_departments }}";
+        var maxDepartments ="{{ max_departments }}";
+        var progressWidthDepartments = (totalDepartments / maxDepartments) * 100;
+        document.getElementById("progressDepartments").style.width = progressWidthDepartments + "%";
+    
+        var totalApprovedRejected = "{{ total_approved_rejected_reimbursements }}";
+        var maxApprovedRejected = "{{ max_approved_rejected_reimbursements }}";
+        var progressWidthApprovedRejected = (totalApprovedRejected / maxApprovedRejected) * 100;
+        document.getElementById("progressApprovedRejected").style.width = progressWidthApprovedRejected + "%";
+    
+        var totalPending = "{{ total_pending_reimbursements }}";
+        var maxPending = "{{ max_pending_reimbursements }}";
+        var progressWidthPending = (totalPending / maxPending) * 100;
+        document.getElementById("progressPending").style.width = progressWidthPending + "%";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var receiptLinks = document.querySelectorAll('.view-receipt');
+            receiptLinks.forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault(); 
+
+                    // getting the receipt data from the data attribute
+                    var receiptData = this.getAttribute('data-receipt');
+
+                    // opens the receipt image in a new tab
+                    var newTab = window.open();
+                    newTab.document.write('<img src="data:image/jpeg;base64,' +
+                    receiptData + '" style="max-width: 100%; max-height: 100%; display: block; margin: auto;">');
+
+                });
+            });
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

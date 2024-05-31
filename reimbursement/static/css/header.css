@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Concert+One&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+        #portal-text {
+            font-family: "Cinzel", serif;
+            font-optical-sizing: auto;
+            font-weight:bolder;
+            font-size: larger;
+            font-style: normal;
+        }
+
+    
+        header {
+            background-color: #333; 
+            color: white; 
+            padding: 10px 20px 10px 20px;
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+
+            position: fixed;
+            right: 0;
+            top: 0;
+            left: 0; /* Adjusted to 0 */
+            z-index: 100;
+            height: 60px;
+            box-shadow: 0px 5px 5px -5px rgb(0 0 0 / 10%);
+            /* background: #fff; */
+            transition: left 300ms;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center; 
+        }
+
+        .logo img {
+            margin-right: 10px; 
+        }
+
+    
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center; 
+        }
+
+        nav ul li {
+            margin-right: 20px;
+            font-family: "Cinzel", serif;
+            font-optical-sizing: auto;
+            font-weight:bold;
+            font-size: larger;
+            font-style: normal;
+        }
+
+        nav ul li a {
+            color: white; 
+            text-decoration: none; 
+        }
+
+        nav ul li a:hover {
+            text-decoration: none; 
+            cursor: pointer;
+            color: red;
+        }

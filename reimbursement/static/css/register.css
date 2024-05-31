@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Concert+One&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+#portal-text {
+    font-family: "Cinzel", serif;
+    font-optical-sizing: auto;
+    font-weight:bolder;
+    font-size: larger;
+    font-style: normal;
+  }
+  header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    height: 63px;
+  
+}
+
+
+.navbar-text {
+    color: white; 
+}
+.navbar .container{
+    margin-left: 40px;
+}
+.myContainer {
+    height: 120vh; 
+    background-color: #E9edf2;
+    padding: 20px;
+}
+.topOfRegisterBox{
+    margin-top: 4rem;
+}
+.registerBox{
+    width: 35%;
+ }
+
+ .card{
+    z-index: 100;
+    box-shadow: 12px 15px 25px 25px rgb(0 0 0 / 10%);
+}
+ .card-title{
+    font-family:'Times New Roman', Times, serif;
+    font-size: 26px;
+    font-weight: bolder;
+}
+.card-body{
+    font-family:'Times New Roman', Times, serif;
+    font-size: 18px;
+    font-weight: bolder;
+}
+.fas{
+    position: relative;
+    color:rgb(255, 67, 67);
+
+}  
+.myButton{
+    background: linear-gradient(45deg,#e91e63,#f44336);
+    color: #fff;
+   width: 300px;
+     border: none;
+     /* 
+    border-radius: 25px;
+    padding: 10px; */
+    -webkit-box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
+    /* margin-left: 70px; */
+}

@@ -1,0 +1,38 @@
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1000;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+}
+
+.notification-title {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.notification-message {
+    flex-grow: 1;
+}
+
+.close-notification {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #888;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

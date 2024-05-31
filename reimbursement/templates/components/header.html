@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reimbursement Portal</title>
+    <link rel="stylesheet" href="/static/css/header.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="/static/images/download.jpg" alt="Logo" height="50" width="50">
+            <span id="portal-text">REIMBURSEMENT PORTAL</span>
+        </div>
+        <nav>
+            <ul>
+                <li>{{ user.full_name }}</li>
+    
+                <li><a href="/logout">Logout</a></li> 
+            </ul>
+        </nav>
+    </header>
+</body>
+</html>

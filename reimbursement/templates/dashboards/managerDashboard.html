@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reimbursement Request Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/manager.css">
+    <script src="/static/javascript/manager.js" defer></script>
+
+   
+</head>
+
+<body>
+     <!-- INCLUDING THE HEADER COMPONENT -->
+    {% include 'components/header.html' %}
+    <section id="tabs" class="tabs">
+        <div class="container">
+             <!-- SECTION TO SWITCH BETWEEN DIFFERENT TABS  -->
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="portfolio-tab" data-bs-toggle="tab" data-bs-target="#portfolio"
+                        type="button" role="tab" aria-controls="portfolio" aria-selected="true">Profile</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="managerPanel-tab" data-bs-toggle="tab"
+                        data-bs-target="#managerPanel" type="button" role="tab"
+                        aria-controls="managerPanel" aria-selected="false">Manager Panel</button>
+                </li>
+
+            </ul>
+    <!-- -------------------------------------------------------------------------- -->
+            <div class="tab-content mt-5 listTab" id="myTabContent">
+                <div class="tab-pane fade show active" id="portfolio" role="tabpanel" aria-labelledby="portfolio-tab">
+                    <!-- 1. PROFILE TAB -->
+                    <main class="dashboard">
+            
+                        <div class="page-header">
+                            <h1>Profile</h1>
+                            <small>Manager / Profile</small>
+                        </div>
+                        
+                        <div class="page-content">
+                            <div class="card outer-card">
+                                <div class="card-body">
+                                    <div class="employee-info d-flex">
+                                        <img src="data:image/jpeg;base64,{{ user.user_image }}" class="card-img-top fixed-image "
+                                            alt="User Image">
+                                        <div class="card inner-card">
+                                            <div class="col">
+                                                <h5 class="text-center"><strong>EMPLOYEE INFORMATION</strong></h5>
+                                                <table class="table">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>EMPLOYEE ID</strong></td>
+                                                            <td>{{ user.id }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>NAME</strong></td>
+                                                            <td>{{ user.full_name }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>EMAIL</strong></td>
+                                                            <td>{{ user.email }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>ROLE</strong></td>
+                                                            <td>{{ user.role }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>DEPARTMENT</strong></td>
+                                                            <td>{{ department_name }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                       
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                        
+                        </div>
+                        
+                    </main>
+                </div>
+<!-- ---------------------------------------------------------------------------- -->
+               <!-- 2.MANAGER OPERATIONS TAB -->
+                <div class="tab-pane fade" id="managerPanel" role="tabpanel"
+                    aria-labelledby="managerPanel-tab">
+                    <main class="dashboard ">
+            
+                        <div class="page-header">
+                            <h1>Manager-Panel</h1>
+                            <small>Manager / Operations</small>
+                        </div>
+                        <div class="page-content manager-operations">
+                        
+                               
+                                    <div class="card" data-bs-toggle="modal" data-bs-target="#employeesUnderMeModal">     
+                                        <div class="card-head">
+                                            <h2>Employees</h2>
+                                            <span class="fa-solid fa-users"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small>Employees Under me</small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>
+                           
+                            
+                                    <div class="card" data-bs-toggle="modal" data-bs-target="#approveOrRejectReimbursementModal">     
+                                        <div class="card-head">
+                                            <h2>approve/reject </h2>
+                                            <span class="fa-solid fa-clock"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small>Reimbursement requests to approve/reject</small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>
+                        
+                           
+                                    <div  class="card" data-bs-toggle="modal" data-bs-target="#seeApprovedRejectedReimbursementModal">     
+                                        <div class="card-head">
+                                            <h2>approved/rejected </h2>
+                                            <span class="fa-solid fa-list-check"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small> approved and rejected requests </small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>              
+                                    <div  class="card" data-bs-toggle="modal" data-bs-target="#submitReimbursementModal">     
+                                        <div class="card-head">
+                                            <h2>Request Reimbursement </h2>
+                                            <span class="fa-solid fa-paper-plane"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small> request for reimbursement </small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>   
+                                    <div  class="card" data-bs-toggle="modal" data-bs-target="#displaySelfReimbursementModal">     
+                                        <div class="card-head">
+                                            <h2>Display Reimbursement </h2>
+                                            <span class="fa-brands fa-readme"></span>
+                                        </div>
+                                        <div class="card-progress">
+                                            <a href="javascript:void(0);"><small>display my reimbursements</small></a>
+                                            <div class="card-indicator">
+                                                <div class="indicator four"  id="progressPending"></div>
+                                            </div>
+                                        </div>                            
+                                       
+                                    </div>                            
+                        </div>
+                  </main>
+                </div>
+
+            </div>
+        </div>
+    </section>
+ <!-- =============================================================================================== -->
+ <!-- =============================================================================================== -->
+    <!-- MODALS FOR CORRESPONDING ABOVE OPERATIONS -->
+    
+     <!-- 1. DISPLAY EMPLOYEES Modal -->
+     <div class="modal fade mt-5" id="employeesUnderMeModal" tabindex="-1" aria-labelledby="employeesUnderMeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="employeesUnderMeModalLabel">Employees under me </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if employees_under_manager %}
+                    <div class="records table-responsive">
+
+            
+                        <div>
+                            <table width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th><span class="las la-sort"></span> EMPLOYEE</th>
+                                        <th><span class="las la-sort"></span> ROLE</th>
+                                        <th><span class="las la-sort"></span>DEPARTMENT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for employee in employees_under_manager %}
+                                    <tr>
+                                        <td>#{{employee.id}}</td>
+                                        <td>
+                                            <div class="client">
+                                                {% if employee.user_image %}
+                                                <div class="client-img bg-img" style="background-image: url('data:image/jpeg;base64,{{ employee.user_image }}')"></div>
+                                                {% else %}
+                                                <div class="client-img bg-img" style="background-image: url('/static/images/logo.png')"></div>
+                                                {% endif %}                                                  
+                                                <div class="client-info">
+                                                <h4>{{employee.full_name}}</h4>
+                                                <small>{{employee.email}}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{employee.role}}
+                                        </td>
+                                        <td>
+                                            {{ employee.department.dept_name if employee.department else 'No Department' }}
+                                        </td>
+                                    </tr>
+                                  
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+    
+                    </div>
+                    {% else %}
+                    <h5 class="text-center">No employees to display.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- 2. APPROVE or REJECT REIMBURSEMENT Request modal -->
+     <div class="modal fade mt-5" id="approveOrRejectReimbursementModal" tabindex="-1" aria-labelledby="approveOrRejectReimbursementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title" id="approveOrRejectReimbursementModalLabel">To Approve or Reject Reimbursement Requests</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if Unchecked_reimbursement_requests %}
+                    <div class="table-responsive">
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Employee </th>
+                                    <th>Request Category</th>
+                                    <th>Expense Type</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Receipt</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in Unchecked_reimbursement_requests %}
+                                <tr>
+                                    <td>#{{ request.id }}</td>
+                                    <td>
+                                        <div class="client">
+                                            {% if request.user.user_image %}
+                                            <div class="client-img bg-img" style="background-image: url('data:image/jpeg;base64,{{ request.user.user_image }}')"></div>
+                                            {% else %}
+                                            <div class="client-img bg-img" style="background-image: url('/static/images/logo.png')"></div>
+                                            {% endif %}                                                  
+                                            <div class="client-info">
+                                            <h4>{{request.user.full_name}}</h4>
+                                            <small>{{request.user.email}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ request.request_category }}</td>
+                                    <td>{{ request.otherExpenseType if request.otherExpenseType else request.expense_type }}</td>
+                                    <td>{{ request.amount }}</td>
+                                    <td>{{ request.date }}</td>
+                                  
+
+
+                                    <td>
+                                        <a href="#" class="view-receipt" data-receipt="{{ request.receipt }}">View Receipt</a>
+                                        
+                                    </td>
+                                    <td>{{ request.status }}</td>
+                                    <td>
+                                        <form id="reimbursementForm-{{ request.id }}" method="POST" action="">
+                                            <input type="hidden" id="action" name="action" value="">
+                                            <input type="hidden" id="userRole" name="userRole" value="{{ user.role }}">
+                                            <input type="hidden" id="request_id" name="request_id" value="{{ request.id }}">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <textarea name="comment" id="comment" class="form-control comment-textarea"  placeholder="Add your comment here..." required></textarea>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <button type="button" class="btn btn-success" onclick="setAction('approve', this.form);">Approve</button>
+                                                    <button type="button" class="btn btn-danger" onclick="setAction('reject', this.form);">Reject</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <h5 class="text-center">No reimbursement requests to display.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 3.SEE all APPROVED/REJECTED REIMBURSEMENT Requests Modal -->
+    <div class="modal fade mt-5" id="seeApprovedRejectedReimbursementModal" tabindex="-1" aria-labelledby="seeApprovedRejectedReimbursementModalLabel" aria-hidden="true"  style="padding-bottom: 40px;">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title" id="seeApprovedRejectedReimbursementModalLabel">Approved or Rejected Reimbursement Requests</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if checked_reimbursement_requests %}
+                    <div class="table-responsive">
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Request ID</th>
+                                    <th scope="col">Employee</th>
+                                    <th scope="col">Request Category</th>
+                                    <th scope="col">Expense Type</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Receipt</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in checked_reimbursement_requests %}
+                                <tr>
+                                    <td>#{{ request.id }}</td>
+                                    <td>
+                                        <div class="client">
+                                            {% if request.user.user_image %}
+                                            <div class="client-img bg-img" style="background-image: url('data:image/jpeg;base64,{{ request.user.user_image }}')"></div>
+                                            {% else %}
+                                            <div class="client-img bg-img" style="background-image: url('/static/images/logo.png')"></div>
+                                            {% endif %}                                                  
+                                            <div class="client-info">
+                                            <h4>{{request.user.full_name}}</h4>
+                                            <small>{{request.user.email}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ request.request_category }}</td>
+                                    <td>{{ request.expense_type }}</td>
+                                    <td>{{ request.amount }}</td>
+                                    <td>{{ request.date }}</td>
+                                    <td>
+                                        <a href="#" class="view-receipt" data-receipt="{{ request.receipt }}">View Receipt</a>                 
+                                    </td>
+                                    <td>{{ request.status }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <h5 class="text-center">No reimbursement requests to display.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- 4. SUBMIT REIMBURSEMENT Modal -->
+    <div class="modal fade mt-5" id="submitReimbursementModal" tabindex="-1" aria-labelledby="submitReimbursementModalLabel" aria-hidden="true">
+       <div class="modal-dialog modal-dialog-centered">
+           <div class="modal-content">
+               <div class="modal-header" >
+                   <h5 class="modal-title " id="submitReimbursementModalLabel">Claim a Reimbursement</h5>
+                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                       aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                   <form id="reimbursementForm" method="POST" action="/submit_reimbursement"
+                       enctype="multipart/form-data">
+                       <input type="hidden" id="userRoleforSubmit" name="userRoleforSubmit" value="{{ user.role }}">
+                       <div class="form-group ">
+                           <label for="requestCategory" class="form-label"> Request Category:</label>
+                           <select id="requestCategory" name="requestCategory" onchange="changeExpenseType()"
+                               class="form-control" required>
+                               <option value="">Select Request Category</option>
+                               <option value="Travel">Travel</option>
+                               <option value="Relocation">Relocation</option>
+                               <option value="Tech Assets">Tech Assets</option>
+                           </select>
+                       </div>
+                       <div class="form-group ">
+                           <label for="expenseType" class="form-label">Expense Type:</label>
+                           <select id="expenseType" name="expenseType" class="form-control" required>
+                               <option value="">Select Expense Type</option>
+
+                           </select>
+                           <input type="text" id="otherExpenseType" name="otherExpenseType"
+                               placeholder="Enter Other Expense Type" class="form-control" style="display: none;">
+                       </div>
+                       <div class="form-group ">
+                           <label for="amount" class="form-label">Amount:</label>
+                           <input type="number" id="amount" name="amount" min="0" class="form-control" required>
+                           <span id="amountWarning" style="color: red;"></span>
+                       </div>
+                       <div class="form-group ">
+                           <label for="date" class="form-label">Date:</label>
+                           <input type="date" id="date" name="date" class="form-control" required>
+                       </div>
+                       <div class="form-group ">
+                           <label for="receipt" class="form-label">Receipt:</label>
+                           <input type="file" id="receipt" name="receipt" accept="image/*" class="form-control"
+                               required>
+                       </div>
+                       <div class="text-center mt-3">
+                           <button type="submit" class="btn btn-outline-danger">submit request</button>
+                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       </div>
+                   </form>
+               </div>
+           </div>
+       </div>
+   </div>
+
+    <!-- 5.SEE SELF REIMBURSEMENTS Modal -->
+     <div class="modal fade mt-5" id="displaySelfReimbursementModal" tabindex="-1" aria-labelledby="displaySelfReimbursementModalLabel" aria-hidden="true"  style="padding-bottom: 40px;">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header" >
+                    <h5 class="modal-title" id="displaySelfReimbursementModalLabel">self reimbursement requests</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if self_reimbursement_requests %}
+                    <div class="table-responsive">
+                        <table class="table ">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Request ID</th>
+                                    <th scope="col">Request Category</th>
+                                    <th scope="col">Expense Type</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Receipt</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in self_reimbursement_requests %}
+                                <tr>
+                                    <td>#{{ request.id }}</td>
+                                
+                                    <td>{{ request.request_category }}</td>
+                                    <td>{{ request.expense_type }}</td>
+                                    <td>{{ request.amount }}</td>
+                                    <td>{{ request.date }}</td>
+                                    <td>
+                                        <a href="#" class="view-receipt" data-receipt="{{ request.receipt }}">View Receipt</a>                 
+                                    </td>
+                                    <td>{{ request.status }}</td>
+                                    <td>{{ request.manager_comment }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <h5 class="text-center">No reimbursement requests to display.</h5>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</html>
