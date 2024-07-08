@@ -1,5 +1,3 @@
-
-
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Concert+One&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 #portal-text {
@@ -74,13 +72,11 @@
 .myButton{
     background: linear-gradient(45deg,#e91e63,#f44336);
     color: #fff;
-   width: 300px;
-     border: none;
+    width: 300px;
+    border: none;
      /* 
     border-radius: 25px;
     padding: 10px; */
-    -webkit-box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
-    -moz-box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
     box-shadow: 0px 10px 41px -11px rgba(0, 0, 0, 0.7);
 
 }

@@ -1,5 +1,5 @@
 # ignore all files 
 *.log
-
+.coverage
 # Ignore Python bytecode files
 __pycache__/

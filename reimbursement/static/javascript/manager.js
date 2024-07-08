@@ -52,14 +52,14 @@ function changeExpenseType() {
     // updating the max attribute for the amount input field .max is inbuilt
     amountInput.max = maxAmount;
 
-    // show/hide Other Expense Type input based on selected option
-    if (expenseTypeSelect.value === "Other") {
-        otherExpenseTypeInput.style.display = "block";
-        otherExpenseTypeInput.required = true;
-    } else {
-        otherExpenseTypeInput.style.display = "none";
-        otherExpenseTypeInput.required = false;
-    }
+    // // show/hide Other Expense Type input based on selected option
+    // if (expenseTypeSelect.value === "Other") {
+    //     otherExpenseTypeInput.style.display = "block";
+    //     otherExpenseTypeInput.required = true;
+    // } else {
+    //     otherExpenseTypeInput.style.display = "none";
+    //     otherExpenseTypeInput.required = false;
+    // }
 }
 
 // adding event listener to expense type dropdown

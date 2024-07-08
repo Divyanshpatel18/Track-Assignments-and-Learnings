@@ -5,9 +5,10 @@ function openUpdateModal(id, category, expenseType, amount, date, receipt) {
     document.getElementById('updateExpenseType').value = expenseType;
     document.getElementById('updateAmount').value = parseFloat(amount);
     document.getElementById('updateDate').value = date;
-    document.getElementById('updateReceipt').dataset.receipt = receipt; // Handle file input if necessary
+    document.getElementById('updateReceipt').dataset.receipt = receipt; 
 
     // Show the modal
+    //creating a  new modal instance for thee updateReimburesmentModal
     var updateModal = new bootstrap.Modal(document.getElementById('updateReimbursementModal'));
     updateModal.show();
 }
@@ -71,13 +72,13 @@ function changeExpenseType() {
     amountInput.max = maxAmount;
     
     // show/hide Other expense Type input based on selected option
-    if (expenseTypeSelect.value === "Other") {
-        otherExpenseTypeInput.style.display = "block";
-        otherExpenseTypeInput.required = true;
-    } else {
-        otherExpenseTypeInput.style.display = "none";
-        otherExpenseTypeInput.required = false;
-    }
+    // if (expenseTypeSelect.value === "Other") {
+    //     otherExpenseTypeInput.style.display = "block";
+    //     otherExpenseTypeInput.required = true;
+    // } else {
+    //     otherExpenseTypeInput.style.display = "none";
+    //     otherExpenseTypeInput.required = false;
+    // }
 }
 
 // adding event listener to expense type dropdown

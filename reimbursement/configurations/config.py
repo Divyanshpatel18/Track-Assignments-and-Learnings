@@ -1,7 +1,7 @@
 
 # Database configuration
-DB_USERNAME = '<username>'
-DB_PASSWORD = '<password>'
+DB_USERNAME = 'root'
+DB_PASSWORD = 'Divi%401321'
 DB_HOST = 'localhost'
 DB_NAME = 'reimbursement'
 

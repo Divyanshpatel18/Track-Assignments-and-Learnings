@@ -1,7 +1,7 @@
 import base64
 import logging
 import werkzeug
-from flask import Flask, jsonify, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, redirect, session, url_for
 from sqlalchemy.orm import sessionmaker, joinedload
 from sqlalchemy import and_, create_engine, desc, func, or_
 from Entities.CreateTables import Department, Reimbursement, User
@@ -57,7 +57,7 @@ def hello():
                                     notification_message='Error in rendering Home Page',
                                     notification_type='error',
                                     icon='times',
-                                    href='/admin/dashboard')  
+                                    href='/login')  
 
 # ---------------------------------------------------------------
 # 2. ROUTE FOR ADMIN DASHBOARD
@@ -67,7 +67,7 @@ def admin_dashboard():
         log_audit("API_ROUTE", "route /admin/dashboard called") 
         if 'user_id' in session:
             user_id = session['user_id']
-            print(f"user id is {user_id}")
+            # print(f"user id is {user_id}")
         
             # Get user details from database
             db_session = Session()
@@ -95,28 +95,28 @@ def admin_dashboard():
             log_audit("ACCESS_DASHBOARD", f"fetching UNCHECKED_MANAGERS_REIMBURSEMENT_REQUESTS")
             unchecked_managers_reimbursement_requests = (
                 db_session.query(Reimbursement)
-                .join(User, Reimbursement.user_id == User.id)  # Joining User table with Reimbursement table
-                .options(joinedload(Reimbursement.user))  # Eager loading of associated User data
+                .join(User, Reimbursement.user_id == User.id)  # joining User table with Reimbursement table
+                .options(joinedload(Reimbursement.user))  # Eager loading of associated user data
                 .filter(
                     or_(
-                        User.role == "manager",  # Filtering for users with role as "manager"
-                        User.manager_id == 1  # Filtering for users with manager_id as 1
+                        User.role == "manager",  # filtering for users with role as manager
+                        User.manager_id == 1  # filtering for users with manager_id as 1 means admin
                     ),
-                    Reimbursement.status == 'Pending'  # Filtering for pending reimbursements
+                    Reimbursement.status == 'Pending' 
                 )
                 .all()
             )
             log_audit("ACCESS_DASHBOARD", f"fetching CHECKED_MANAGERS_REIMBURSEMENT_REQUESTS")
             checked_managers_reimbursement_requests = (
                 db_session.query(Reimbursement)
-                .join(User, Reimbursement.user_id == User.id)  # Joining User table with Reimbursement table
+                .join(User, Reimbursement.user_id == User.id)  #  joining User table with Reimbursement table
                 .options(joinedload(Reimbursement.user))  # Eager loading of associated User data
                 .filter(
                     or_(
-                        User.role == "manager",  # Filtering for users with role as "manager"
-                        User.manager_id == 1  # Filtering for users with manager_id as 1
+                        User.role == "manager",  # filtering for users with role as manager
+                        User.manager_id == 1 # filtering for users with manager_id as 1 means admin
                     ),
-                    Reimbursement.status != 'Pending'  # Filtering for reimbursements that are not pending
+                    Reimbursement.status != 'Pending' 
                 )
                 .all()
             )
@@ -124,8 +124,10 @@ def admin_dashboard():
             latest_reimbursements = db_session.query(Reimbursement).options(joinedload(Reimbursement.user)).order_by(desc(Reimbursement.id)).limit(10).all()
 
             log_audit("ACCESS_DASHBOARD", f"decoding UNCHECKED_MANAGERS_REIMBURSEMENT_REQUESTS receipt and user images ")
+            
             for reimbursement in unchecked_managers_reimbursement_requests:
                 if reimbursement.receipt:
+                    #binary data(0010 0011 0011)-> to base64 string(VGhpcyBpcyBhIHNtYWx==)
                     reimbursement.receipt = base64.b64encode(reimbursement.receipt).decode('utf-8')
                 if reimbursement.user.user_image:
                     if isinstance(reimbursement.user.user_image, bytes):
@@ -167,7 +169,7 @@ def admin_dashboard():
                                         max_users=50,
                                         max_departments=8,
                                         max_approved_rejected_reimbursements=100,
-                                        max_pending_reimbursements=15,
+                                        max_pending_reimbursements=30,
                                         unchecked_managers_reimbursement_requests=unchecked_managers_reimbursement_requests,
                                         checked_managers_reimbursement_requests=checked_managers_reimbursement_requests,
                                         )
@@ -259,7 +261,7 @@ def manager_dashboard():
             log_audit("ACCESS_DASHBOARD", f"fetching APPROVED/REJECTED_REIMBURSEMENT_REQUESTS")
             # Query for checked reimbursement requests with user details
             checked_reimbursement_requests = db_session.query(Reimbursement).options(joinedload(Reimbursement.user)).join(User).filter(
-                (User.manager_id == user_id),
+                (User.manager_id == user_id),#fetch under employees
                 User.id != user_id,  # Exclude the manager's own requests
                 or_(Reimbursement.status == 'Approved', Reimbursement.status == 'Rejected')
             ).all()
@@ -336,7 +338,7 @@ def register_form():
 def register():
     try:
         if request.method == 'POST':
-            # Get form data
+           
             full_name = request.form['full_name']
             email = request.form['email']
             password = request.form['password']
@@ -345,25 +347,25 @@ def register():
             # dept_id=get_id_by_department_name(department)
             # print(f'serarching for dept name is {department}')
             # Convert department ID to an integer
-                    # Debugging statement to check the department ID
+                  
             print("Department ID:", department_id)
             log_audit("REGISTER_ATTEMPT", f"User {email} is attempting to register")
-            # Check for existing user with the same email
-            existing_user = get_user_by_email(email)  # Add this function to fetch user by email
+            # Checking for existing user with the same email
+            existing_user = get_user_by_email(email)  
             if existing_user:
                 log_audit("REGISTER_FAIL", f"Registration failed for {email}: User already exists")
                 return render_template('/components/notification.html', notification_title='Error',
                                     notification_message='User with this email already exists.',
                                     notification_type='error',
                                     icon='times',
-                                    href='/')
+                                    href='/register_form')
             department_id = int(department_id)
-            # Call the add_user function to store user data in the database
+            # calling the add_user function to store user data 
             result=add_user(full_name, email, password, department_id,user_image)
 
             if result:
                 log_audit("REGISTER_SUCCESS", f"User {email} registered successfully")
-                # Redirect to a success page or any other desired page after registration
+              
                 return render_template('/components/notification.html', notification_title='Success',
                                        notification_message='User registered successfully.',
                                        notification_type='success',
@@ -375,16 +377,16 @@ def register():
                                        notification_message='Error in registration. Please try again.',
                                        notification_type='error',
                                        icon='times',
-                                       href='/register')
+                                       href='/register_form')
                                 
 
-        # Render the registration form template
-        log_audit("ACCESS_REGISTER_FORM", "Rendering register form")
-        return render_template('/components/notification.html', notification_title='Error', 
-                                notification_message='Error in registration',
-                                notification_type='error',
-                                icon='times',
-                                href='/register')
+        elif request.method=='GET':
+            log_audit("ACCESS_REGISTER_FORM", "Rendering register form")
+            return render_template('/components/notification.html', notification_title='Error', 
+                                    notification_message='Error in registration',
+                                    notification_type='error',
+                                    icon='times',
+                                    href='/register_form')
     except Exception as e:
         logging.error(f"Error during registration: {e}")
         return render_template('/components/notification.html', notification_title='Error',
@@ -400,12 +402,12 @@ def register():
 def login():
     try:
         if request.method == 'POST':
-            # Get form data
+           
             email = request.form['email']
             password = request.form['password']
 
             log_audit("LOGIN_ATTEMPT", f"User {email} is attempting to log in")
-            # Authenticate user credentials
+            # authenticating user credentials
             user = authenticate_user(email, password)
 
             if user:
@@ -418,7 +420,6 @@ def login():
                 else:
                     return redirect('/employee/dashboard')
             else:
-                # Return an error message if authentication fails
                 log_audit("LOGIN_FAIL", f"Login failed for {email}: Invalid credentials")
                 return render_template('/components/notification.html', notification_title='Error', 
                                 notification_message='Invalid Credentials',
@@ -426,8 +427,7 @@ def login():
                                 icon='times',
                                 href='/')
 
-        else:
-            # Render the login form template
+        elif request.method=='GET':
             log_audit("ACCESS_LOGIN_FORM", "Rendering login form")
             return render_template('authentication/login.html')
         
@@ -464,23 +464,20 @@ def logout():
 @app.route('/assign_manager', methods=['POST'])
 def assign_manager():
     try:
-        # Get form data
+        
         employee_id = request.form['employee_id']
         manager_id = request.form['manager_id']
         log_audit("ASSIGN_MANAGER_ATTEMPT", f"Assigning manager {manager_id} to employee {employee_id}")
-
-        # Create a session to interact with the database
+     
         db_session = Session()
 
-        # Fetch the employee and manager from the database
+        # Fetcing the employee and manager from the database
         employee = db_session.query(User).filter_by(id=employee_id).first()
         manager = db_session.query(User).filter_by(id=manager_id, role='manager').first()
 
         if employee and manager:
-            # Assign the manager ID to the employee
+            # Assigning the manager ID to the employee
             employee.manager_id = manager.id
-
-            # Commit the transaction and close the session
             db_session.commit()
             db_session.close()
             log_audit("ASSIGN_MANAGER_SUCCESS", f"Manager {manager_id} assigned to employee {employee_id} successfully")
@@ -493,7 +490,6 @@ def assign_manager():
         else:
             db_session.close()
             log_audit("ASSIGN_MANAGER_FAIL", "Employee or Manager not found, or the manager ID provided is not a manager")
-            # Render failure notification template
             return render_template('/components/notification.html', notification_title='Error', 
                                 notification_message='Employee or Manager not found, or the manager ID provided is not a manager. Please try again',
                                 notification_type='error',
@@ -518,12 +514,10 @@ def make_manager_form():
         db_session = Session()
         employee = db_session.query(User).filter_by(id=employee_id).first()
         if employee:
-            # Check if the employee is already a manager
+            # Checks if the employee is already a manager
             if employee.role == "manager":
                 db_session.close()
                 log_audit("MAKE_MANAGER_FAIL", f"Employee {employee_id} is already a manager")
-
-                # Return an error response indicating the employee is already a manager
                 return render_template('/components/notification.html', notification_title='Error', 
                                 notification_message='Employee Already a Manager',
                                 notification_type='error',
@@ -533,17 +527,14 @@ def make_manager_form():
             employee.role = "manager"
             db_session.commit()
             db_session.close()
-            # Render success notification template
-
             log_audit("MAKE_MANAGER_SUCCESS", f"Employee {employee_id} assigned as manager successfully")
             return render_template('/components/notification.html', notification_title='Success', 
-                                notification_message='Manager assigned successfully.',
+                                notification_message='Manager made successfully.',
                                 notification_type='success',
                                 icon='check',
                                 href='/admin/dashboard')
         else:
             db_session.close()
-            # Render failure notification template
             log_audit("MAKE_MANAGER_FAIL", f"Employee {employee_id} not found")
             return render_template('/components/notification.html', notification_title='Error', 
                                 notification_message='Employee not found. Please try again.',
@@ -633,7 +624,7 @@ def delete_department():
             if result:
                 log_audit("DELETE_DEPARTMENT_SUCCESS", f"Department with ID {dept_id} deleted successfully")
                 return render_template('/components/notification.html', notification_title='Success', 
-                                    notification_message='department deleted successfully.',
+                                    notification_message='Department deleted successfully.',
                                     notification_type='success',
                                     icon='check',
                                     href='/admin/dashboard')
@@ -671,7 +662,7 @@ def submit_reimbursement():
         otherExpenseType = request.form['otherExpenseType']
         amount = request.form['amount']
         date = request.form['date']
-        receipt = request.files['receipt'].read()  # Read the uploaded file as binary data'
+        receipt = request.files['receipt'].read()  # read the uploaded file as binary data'
         image_size = len(receipt)
         print("Image size in bytes:", image_size)
     
@@ -712,16 +703,13 @@ def submit_reimbursement():
 # ---------------------------------------------------------------
 
 def is_authorized_manager(session, manager_id, request_id):
-    # Query the reimbursement request from the database
-    reimbursement = session.query(Reimbursement).filter_by(id=request_id).first()
-
-    # Check if the reimbursement exists and if the manager_id matches
+    # query the reimbursement request and join the user table
+    reimbursement = session.query(Reimbursement).join(User).filter(Reimbursement.id == request_id).first()
+    # Checks if the reimbursement exists and if the manager_id matches
     if reimbursement and reimbursement.user.manager_id == manager_id:
         return True
     else:
-        return False
-    
-
+        return False   
 
 # 15. ROUTE TO APPROVE REIMBURSEMENT
 @app.route('/approve_reimbursement',methods=['POST'])
@@ -808,7 +796,7 @@ def reject_reimbursement():
         role=request.form["userRole"]
         db_session=Session()
         if role=="manager":
-            # Check if the manager is authorized to reject the request
+            # Checks if the manager is authorized to reject the request
             if is_authorized_manager(db_session, user_id, request_id):
                 reimbursement=db_session.query(Reimbursement).filter_by(id=request_id).first()
                 if reimbursement:
@@ -871,11 +859,8 @@ def reject_reimbursement():
 # --------------------------------------------------------------
 # 17. ROUTE TO UPDATE REIMBURSEMENT
 @app.route('/update_reimbursement', methods=['POST','GET'])
-def update_reimbursement():
-    print("in update reimburesement","\n")
+def update_reimbursement():   
     try:
-        # Parse request data
-        print("in try")
         reimbursement_id = request.form['updateRequestId'] 
         print(reimbursement_id)
         requestCategory = request.form['updateRequestCategory']
@@ -883,15 +868,12 @@ def update_reimbursement():
         otherExpenseType = request.form['updateOtherExpenseType']
         amount = request.form['updateAmount']
         date = request.form['updateDate']
-        receipt = request.files['updateReceipt'].read()  # Read the uploaded file as binary data'
+        receipt = request.files['updateReceipt'].read()  # reads the uploaded file as binary data'
         # image_size = len(receipt)
-        print(f"result is :","\n")
-        print(f"result is :","\n")  
-        # Call function to update reimbursement
+     
+        # Calling the function to update reimbursement
         result = update_user_reimbursement(reimbursement_id, requestCategory, expenseType, otherExpenseType, amount, date, receipt)
-        print(f"result is {result} :","\n")
-        print(f"result is {result}:","\n") 
-        # Handle result and return response
+
         if result:
             log_audit("UPDATE_REIMBURSEMENT_SUCCESS", "Reimbursement updated successfully")
             return render_template('/components/notification.html', notification_title='Success', 
@@ -915,7 +897,8 @@ def update_reimbursement():
                                icon='times',
                                href='/employee/dashboard') 
 
+# ------------------------------------------------------------
+
 #  Run the Flask app
 if __name__ == '__main__':
-    # init_db()
     app.run(debug=True)
